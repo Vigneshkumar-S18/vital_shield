@@ -1,0 +1,226 @@
+export const initialUserProfile = {
+  name: 'Ananya',
+  fullName: 'Ananya Sharma',
+  age: 26,
+  avatar: '/avatar_ananya.jpg',
+  device: {
+    name: 'VitalShield VS-001',
+    firmware: 'v2.4.1',
+    battery: 82,
+    status: 'Connected',
+    lastSync: 'Just now',
+    bleRssi: -58,
+  },
+  baseline: {
+    restingHr: 68,
+    activeHrThreshold: 88,
+    normalTemp: 36.6,
+    normalSpo2: 98,
+    heatToleranceScore: 84,
+  },
+};
+
+export const initialContacts = [
+  {
+    id: 'c1',
+    name: 'Mom',
+    relation: 'Mother',
+    phone: '+91 98765 43210',
+    priority: 'Primary',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
+    notifyChannel: 'SMS + Call + Relay',
+    shareHealth: true,
+    lastNotified: '2 min ago',
+  },
+  {
+    id: 'c2',
+    name: 'Dad',
+    relation: 'Father',
+    phone: '+91 91234 56789',
+    priority: 'Primary',
+    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80',
+    notifyChannel: 'SMS + Call',
+    shareHealth: true,
+    lastNotified: '2 min ago',
+  },
+  {
+    id: 'c3',
+    name: 'Best Friend',
+    relation: 'Friend',
+    phone: '+91 99887 66554',
+    priority: 'Secondary',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    notifyChannel: 'WhatsApp + SMS',
+    shareHealth: false,
+    lastNotified: '2 min ago',
+  },
+  {
+    id: 'c4',
+    name: 'Office Security',
+    relation: 'Organization Contact',
+    phone: '+91 80 1234 5678',
+    priority: 'Secondary',
+    avatarInitials: 'OS',
+    notifyChannel: 'Security Desk Radio + Alert',
+    shareHealth: false,
+    lastNotified: 'Just now',
+  },
+];
+
+export const initialVitals = {
+  heartRate: 78,
+  heartRateUnit: 'bpm',
+  spo2: 98,
+  spo2Unit: '%',
+  bodyTemp: 36.6,
+  bodyTempUnit: '°C',
+  activity: 'Walking',
+  activityLevel: 'Moderate',
+  stressIndex: 'Low',
+  statusDescription: "You're doing well",
+  statusSubtitle: 'Vitals are within your normal range',
+  ambientTemp: 31.4,
+  humidity: 62,
+  heatRisk: 'Low',
+  exposureDuration: '45m',
+};
+
+export const sparklineData = {
+  heartRate: [74, 75, 78, 82, 80, 77, 76, 79, 81, 78, 77, 78],
+  spo2: [98, 98, 97, 98, 99, 98, 98, 99, 98, 98, 98, 98],
+  bodyTemp: [36.5, 36.5, 36.6, 36.6, 36.7, 36.6, 36.6, 36.7, 36.6],
+  activityBars: [24, 30, 42, 55, 38, 45, 60, 50, 68, 75, 90, 82],
+  stressWave: [18, 20, 22, 19, 25, 32, 28, 22, 24, 21, 26, 20],
+};
+
+export const sensorDiagnostics = [
+  { name: 'Heart Rate (PPG)', status: 'Good', icon: 'heart', samplingRate: '25 Hz' },
+  { name: 'SpO₂ Sensor', status: 'Good', icon: 'droplet', samplingRate: '10 Hz' },
+  { name: 'Skin Temperature', status: 'Good', icon: 'temp', samplingRate: '1 Hz' },
+  { name: 'IMU (Motion/Activity)', status: 'Good', icon: 'motion', samplingRate: '50 Hz' },
+  { name: 'Environment (BME280)', status: 'Good', icon: 'cloud', samplingRate: '0.2 Hz' },
+  { name: 'GNSS Satellite Fix', status: 'Available', icon: 'gps', accuracy: '±8 m' },
+];
+
+export const keyInsightsData = [
+  {
+    id: 'ins-1',
+    icon: 'sun',
+    title: 'Higher heart rate around 2 PM',
+    subtitle: 'due to increased heat',
+    impact: 'Moderate',
+    time: '2:15 PM',
+    details: {
+      changed: 'HR shifted +14 BPM above your activity-adjusted baseline',
+      contributed: 'Ambient temp 33.2°C + direct sunlight exposure (1h 10m)',
+      stable: 'SpO₂ maintained stable at 98%',
+      action: 'Take a cooling break in shade and replenish hydration.',
+    },
+  },
+  {
+    id: 'ins-2',
+    icon: 'drop',
+    title: 'Hydration reminder',
+    subtitle: "You've been active for 1.5 hours",
+    impact: 'Low',
+    time: '12:30 PM',
+    details: {
+      changed: 'Cumulative active metabolic expenditure elevated',
+      contributed: 'Sustained brisk walk with 8,420 steps logged',
+      stable: 'Electrolyte & body temperature regulation normal',
+      action: 'Drink 250–300 ml water to stay ahead of fluid loss.',
+    },
+  },
+  {
+    id: 'ins-3',
+    icon: 'moon',
+    title: 'Good recovery',
+    subtitle: 'Your vitals are back to normal',
+    impact: 'Positive',
+    time: '4:45 PM',
+    details: {
+      changed: 'Heart rate returned to resting baseline (72 BPM)',
+      contributed: 'Resting period in cool air-conditioned space',
+      stable: 'Cardiac vagal tone recovered fully',
+      action: 'Pacing was effective. Keep up the consistent hydration routine.',
+    },
+  },
+];
+
+export const healthReportsData = {
+  day: {
+    date: '12 June 2024',
+    healthScore: 86,
+    statusText: 'Good',
+    statusDesc: 'Your vitals were stable for most of the day.',
+    metrics: [
+      { label: 'Heart Rate', value: 'Avg 78 bpm', badge: 'Normal', color: 'green' },
+      { label: 'SpO₂', value: 'Avg 98%', badge: 'Normal', color: 'green' },
+      { label: 'Body Temperature', value: 'Avg 36.6°C', badge: 'Normal', color: 'green' },
+      { label: 'Active Time', value: '2h 18m', badge: null },
+      { label: 'Steps', value: '8,420', badge: null },
+      { label: 'Calories Burned', value: '420 kcal', badge: null },
+    ],
+    timeline: [
+      { time: '08:00 AM', status: 'LOW RISK', hr: 72, note: 'Morning resting state' },
+      { time: '11:15 AM', status: 'MODERATE', hr: 84, note: 'Brisk commute & activity' },
+      { time: '02:00 PM', status: 'ELEVATED', hr: 96, note: 'High ambient heat (33°C)' },
+      { time: '04:30 PM', status: 'LOW RISK', hr: 74, note: 'Post-rest baseline recovery' },
+    ],
+  },
+  week: {
+    date: '06 Jun – 12 Jun 2024',
+    healthScore: 89,
+    statusText: 'Excellent',
+    statusDesc: 'Overall high stability with 94% time spent in low risk zone.',
+    metrics: [
+      { label: 'Avg Heart Rate', value: '74 bpm', badge: 'Optimal', color: 'green' },
+      { label: 'Avg SpO₂', value: '98.4%', badge: 'Normal', color: 'green' },
+      { label: 'Avg Skin Temp', value: '36.5°C', badge: 'Normal', color: 'green' },
+      { label: 'Total Active Time', value: '14h 40m', badge: null },
+      { label: 'Avg Daily Steps', value: '9,150', badge: null },
+      { label: 'Heat Exposure Alerts', value: '2 resolved', badge: 'Managed', color: 'green' },
+    ],
+  },
+  month: {
+    date: 'May 13 – June 12 2024',
+    healthScore: 91,
+    statusText: 'Optimal',
+    statusDesc: 'Personal baseline adapted smoothly to summer season conditions.',
+    metrics: [
+      { label: 'Resting Baseline HR', value: '68 bpm', badge: 'Stable', color: 'green' },
+      { label: 'SpO₂ Compliance', value: '99.1%', badge: 'High Quality', color: 'green' },
+      { label: 'Mean Skin Temp', value: '36.6°C', badge: 'Regulated', color: 'green' },
+      { label: 'Total Active Days', value: '26 of 30', badge: null },
+      { label: 'Total Distance', value: '184 km', badge: null },
+      { label: 'SOS Events Triggered', value: '0', badge: 'Safe', color: 'green' },
+    ],
+  },
+};
+
+export const initialNotifications = [
+  {
+    id: 'n1',
+    level: 3,
+    title: 'Elevated Ambient Heat',
+    message: 'Outdoor temperature reached 33.4°C. Wearable suggests hydration break.',
+    time: '18 min ago',
+    read: false,
+  },
+  {
+    id: 'n2',
+    level: 2,
+    title: 'Baseline Synchronized',
+    message: 'Your 7-day activity-adjusted baseline has been updated successfully.',
+    time: '2 hours ago',
+    read: false,
+  },
+  {
+    id: 'n3',
+    level: 1,
+    title: 'Wearable Battery OK',
+    message: 'VitalShield band is at 82% charge. Estimated 4.5 days remaining.',
+    time: 'Today 08:30 AM',
+    read: false,
+  },
+];
