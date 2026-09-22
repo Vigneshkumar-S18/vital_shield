@@ -226,6 +226,7 @@ export const SettingsScreen = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              borderBottom: '1px solid #F3F4F6',
               cursor: 'pointer',
             }}
           >
@@ -234,6 +235,27 @@ export const SettingsScreen = () => {
               <div>
                 <div style={{ fontSize: '14px', fontWeight: '700', color: '#1B2C1E' }}>About VitalShield</div>
                 <div style={{ fontSize: '11.5px', color: '#6B7280' }}>Version 1.0.0</div>
+              </div>
+            </div>
+            <span style={{ fontSize: '16px', color: '#9CA3AF' }}>›</span>
+          </div>
+
+          {/* Item 6: Welcome / Splash Screen */}
+          <div
+            onClick={() => navigateTo('welcome')}
+            style={{
+              padding: '14px 0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <span style={{ fontSize: '18px' }}>🌄</span>
+              <div>
+                <div style={{ fontSize: '14px', fontWeight: '700', color: '#1B2C1E' }}>Welcome Screen</div>
+                <div style={{ fontSize: '11.5px', color: '#6B7280' }}>View initial splash screen</div>
               </div>
             </div>
             <span style={{ fontSize: '16px', color: '#9CA3AF' }}>›</span>

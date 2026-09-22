@@ -67,6 +67,42 @@ export const initialContacts = [
   },
 ];
 
+export const nearbyPoliceStations = [
+  {
+    id: 'ps-1',
+    name: 'Central Division Police Station',
+    branchName: 'Central Division - Station #04',
+    distance: '1.2 km away',
+    phone: '112 / +91 80 2294 2222',
+    address: 'Sector 4, Main Boulevard',
+    status: 'Dispatched • Live GPS Stream Active',
+    officerOnDuty: 'Inspector S. Roy',
+    type: 'Police Headquarters',
+  },
+  {
+    id: 'ps-2',
+    name: 'Metro Patrol & Emergency Unit (Beat 7)',
+    branchName: 'Metro Outer Ring Safety Branch',
+    distance: '2.4 km away',
+    phone: '+91 80 2294 3333',
+    address: 'Outer Ring Highway Junction',
+    status: 'Relay Connected • Telemetry Acknowledged',
+    officerOnDuty: 'Sub-Inspector M. Kumar',
+    type: 'Rapid Response Unit',
+  },
+  {
+    id: 'ps-3',
+    name: 'Women & Safety Helpline Bureau',
+    branchName: 'Division 2 Emergency Desk',
+    distance: '3.1 km away',
+    phone: '1091 (Toll-Free 24/7)',
+    address: 'Civic Centre Police Complex',
+    status: 'Standby • 24/7 Priority Line Active',
+    officerOnDuty: 'Desk Officer Anjali N.',
+    type: 'Emergency Helpline',
+  },
+];
+
 export const initialVitals = {
   heartRate: 78,
   heartRateUnit: 'bpm',
@@ -102,54 +138,176 @@ export const sensorDiagnostics = [
   { name: 'GNSS Satellite Fix', status: 'Available', icon: 'gps', accuracy: '±8 m' },
 ];
 
-export const keyInsightsData = [
-  {
-    id: 'ins-1',
-    icon: 'sun',
-    title: 'Higher heart rate around 2 PM',
-    subtitle: 'due to increased heat',
-    impact: 'Moderate',
-    time: '2:15 PM',
-    details: {
-      changed: 'HR shifted +14 BPM above your activity-adjusted baseline',
-      contributed: 'Ambient temp 33.2°C + direct sunlight exposure (1h 10m)',
-      stable: 'SpO₂ maintained stable at 98%',
-      action: 'Take a cooling break in shade and replenish hydration.',
+export const insightsDataByPeriod = {
+  today: {
+    score: 86,
+    trend: '↑ 12%',
+    trendPositive: true,
+    summary: 'Your vitals are stable. Keep up the good work!',
+    quote: {
+      line1: '“Small steps every day',
+      line2: 'lead to big changes.”',
     },
+    insights: [
+      {
+        id: 'ins-today-1',
+        icon: 'sun',
+        title: 'Higher heart rate around 2 PM',
+        subtitle: 'due to increased heat',
+        impact: 'Moderate',
+        time: '2:15 PM',
+        details: {
+          changed: 'HR shifted +14 BPM above your activity-adjusted baseline (peaked at 96 BPM)',
+          contributed: 'Ambient temp 33.2°C + direct sunlight exposure (1h 10m)',
+          stable: 'SpO₂ maintained stable at 98%',
+          action: 'Take a cooling break in shade and replenish hydration.',
+        },
+      },
+      {
+        id: 'ins-today-2',
+        icon: 'drop',
+        title: 'Hydration reminder',
+        subtitle: "You've been active for 2h 18m",
+        impact: 'Low',
+        time: '12:30 PM',
+        details: {
+          changed: 'Cumulative active metabolic expenditure reached 420 kcal',
+          contributed: 'Sustained brisk walk with 8,420 steps logged today',
+          stable: 'Electrolyte & body temperature regulation normal (36.6°C)',
+          action: 'Drink 250–300 ml water to stay ahead of fluid loss.',
+        },
+      },
+      {
+        id: 'ins-today-3',
+        icon: 'moon',
+        title: 'Good recovery',
+        subtitle: 'Your vitals are back to resting baseline',
+        impact: 'Positive',
+        time: '4:45 PM',
+        details: {
+          changed: 'Heart rate returned to resting baseline (72 BPM)',
+          contributed: '15-minute rest period in cooled environment',
+          stable: 'Cardiac vagal tone recovered fully within 3 minutes (-22 BPM)',
+          action: 'Pacing was effective. Keep up the consistent routine.',
+        },
+      },
+    ],
   },
-  {
-    id: 'ins-2',
-    icon: 'drop',
-    title: 'Hydration reminder',
-    subtitle: "You've been active for 1.5 hours",
-    impact: 'Low',
-    time: '12:30 PM',
-    details: {
-      changed: 'Cumulative active metabolic expenditure elevated',
-      contributed: 'Sustained brisk walk with 8,420 steps logged',
-      stable: 'Electrolyte & body temperature regulation normal',
-      action: 'Drink 250–300 ml water to stay ahead of fluid loss.',
+  week: {
+    score: 89,
+    trend: '↑ 8%',
+    trendPositive: true,
+    summary: '94% of your time this week was spent in low-risk physiological zone.',
+    quote: {
+      line1: '“Consistency is what transforms',
+      line2: 'average into excellence.”',
     },
+    insights: [
+      {
+        id: 'ins-week-1',
+        icon: 'sun',
+        title: 'Midday Heat Adaptation Improved',
+        subtitle: '3 out of 7 days had elevated ambient heat',
+        impact: 'Positive',
+        time: 'Weekly Review',
+        details: {
+          changed: 'Cardiovascular strain dropped by 18% during peak 12:00–15:00 hours',
+          contributed: 'Better timing of outdoor activities and earlier rest intervals',
+          stable: 'Average skin temp remained regulated at 36.5°C across all 7 days',
+          action: 'Continue scheduling outdoor activities before 11:00 AM or after 4:00 PM.',
+        },
+      },
+      {
+        id: 'ins-week-2',
+        icon: 'activity',
+        title: 'Consistent Step Goal Achievement',
+        subtitle: 'Averaging 9,150 steps/day this week',
+        impact: 'Optimal',
+        time: 'Weekly Trend',
+        details: {
+          changed: 'Daily active step volume increased by 620 steps over weekly average',
+          contributed: 'Consistent evening walking routines on Monday, Wednesday, and Friday',
+          stable: 'Resting heart rate remained steady at 74 bpm throughout active days',
+          action: 'Maintain this aerobic pace; cardiovascular endurance shows steady gains.',
+        },
+      },
+      {
+        id: 'ins-week-3',
+        icon: 'moon',
+        title: 'Optimal Sleep & Night Recovery',
+        subtitle: 'Average resting HR down to 64 bpm overnight',
+        impact: 'Positive',
+        time: 'Sleep Log',
+        details: {
+          changed: 'Nocturnal heart rate variability (HRV) improved by +9 ms',
+          contributed: 'Lower ambient bedroom temperature and proper evening wind-down',
+          stable: 'SpO₂ consistently 98.4% with zero nocturnal dips detected',
+          action: 'Recovery score is in optimal tier. Great restorative sleep.',
+        },
+      },
+    ],
   },
-  {
-    id: 'ins-3',
-    icon: 'moon',
-    title: 'Good recovery',
-    subtitle: 'Your vitals are back to normal',
-    impact: 'Positive',
-    time: '4:45 PM',
-    details: {
-      changed: 'Heart rate returned to resting baseline (72 BPM)',
-      contributed: 'Resting period in cool air-conditioned space',
-      stable: 'Cardiac vagal tone recovered fully',
-      action: 'Pacing was effective. Keep up the consistent hydration routine.',
+  month: {
+    score: 91,
+    trend: '↑ 15%',
+    trendPositive: true,
+    summary: 'Personal baseline adapted smoothly to seasonal conditions.',
+    quote: {
+      line1: '“Wellness is not a destination,',
+      line2: 'but the rhythm of daily care.”',
     },
+    insights: [
+      {
+        id: 'ins-month-1',
+        icon: 'shield',
+        title: 'Thermal Tolerance Baseline Enhanced',
+        subtitle: 'Heat tolerance score increased from 78 to 84',
+        impact: 'Major Achievement',
+        time: 'Monthly Review',
+        details: {
+          changed: 'Body temperature elevation threshold shifted +0.4°C higher without cardiac stress',
+          contributed: 'Consistent 30-day acclimatization to regional September climate (mean 32.4°C)',
+          stable: 'Zero clinical heat exhaustion or high-strain emergency triggers logged',
+          action: 'Your physiological heat resilience has officially upgraded to Tier 1 status.',
+        },
+      },
+      {
+        id: 'ins-month-2',
+        icon: 'heart',
+        title: 'Cardiovascular Baseline Up 12%',
+        subtitle: 'Resting heart rate decreased from 72 to 68 bpm',
+        impact: 'High Impact',
+        time: '30-Day Trend',
+        details: {
+          changed: 'Resting cardiac workload lowered by 4 beats per minute over 30 days',
+          contributed: '184 total kilometers logged across 26 active workout days',
+          stable: 'Oxygen saturation compliance averaged 99.1% across all sensor logs',
+          action: 'Cardiorespiratory fitness has strengthened measurably over the past month.',
+        },
+      },
+      {
+        id: 'ins-month-3',
+        icon: 'check',
+        title: 'Zero Safety Escalations & 99.4% Uptime',
+        subtitle: 'All 6 heat warning alerts were resolved safely',
+        impact: 'Safety Confirmed',
+        time: 'Reliability Metric',
+        details: {
+          changed: 'Average alert response time was under 4 minutes (hydration & shade taken)',
+          contributed: 'Rapid response to wearable thermal warnings and proactive pacing',
+          stable: 'Continuous telemetry connection with emergency relay contacts remained 100% ready',
+          action: 'Superb health vigilance. Share this 30-day safety report with your physician or coach.',
+        },
+      },
+    ],
   },
-];
+};
+
+export const keyInsightsData = insightsDataByPeriod.today.insights;
 
 export const healthReportsData = {
   day: {
-    date: '12 June 2024',
+    date: '23 September 2026',
     healthScore: 86,
     statusText: 'Good',
     statusDesc: 'Your vitals were stable for most of the day.',
@@ -169,7 +327,7 @@ export const healthReportsData = {
     ],
   },
   week: {
-    date: '06 Jun – 12 Jun 2024',
+    date: '17 Sep – 23 Sep 2026',
     healthScore: 89,
     statusText: 'Excellent',
     statusDesc: 'Overall high stability with 94% time spent in low risk zone.',
@@ -183,7 +341,7 @@ export const healthReportsData = {
     ],
   },
   month: {
-    date: 'May 13 – June 12 2024',
+    date: 'September 2026',
     healthScore: 91,
     statusText: 'Optimal',
     statusDesc: 'Personal baseline adapted smoothly to summer season conditions.',

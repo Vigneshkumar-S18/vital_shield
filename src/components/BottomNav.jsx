@@ -14,21 +14,22 @@ export const BottomNav = () => {
   ];
 
   return (
-    <div
+    <nav
       style={{
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-        backgroundColor: '#F6F4ED',
-        borderTop: '1px solid rgba(0, 0, 0, 0.07)',
+        backgroundColor: 'rgba(247, 245, 238, 0.92)',
+        backdropFilter: 'blur(10px)',
+        borderTop: '1px solid rgba(35, 64, 45, 0.08)',
         paddingTop: '8px',
-        paddingBottom: '20px',
+        paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
-        zIndex: 50,
-        boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.03)',
+        zIndex: 60,
+        boxShadow: '0 -2px 12px rgba(0, 0, 0, 0.03)',
       }}
     >
       {tabs.map((tab) => {
@@ -36,10 +37,14 @@ export const BottomNav = () => {
         const isActive = activeBottomTab === tab.id;
         const isSafetyAlert = tab.id === 'safety' && (isSosActive || currentScreen === 'live_location');
         
-        let labelColor = '#849183';
-        if (isActive) {
-          labelColor = isSafetyAlert ? '#B82828' : '#1C2B1D';
+        let activeColor = '#23402D';
+        let inactiveColor = '#718078';
+        if (isSafetyAlert) {
+          activeColor = '#B82828';
+          inactiveColor = '#B82828';
         }
+
+        const color = isActive ? activeColor : inactiveColor;
 
         return (
           <button
@@ -50,33 +55,45 @@ export const BottomNav = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '4px',
-              padding: '4px 12px',
-              minWidth: '58px',
+              justifyContent: 'center',
+              gap: '3px',
+              padding: '4px 10px',
+              minWidth: '56px',
               borderRadius: '8px',
               transition: 'transform 0.15s ease',
             }}
-            onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.92)')}
+            onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.94)')}
             onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
-            <div style={{ position: 'relative' }}>
+            <div
+              style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: isActive ? '3px 16px' : '3px 8px',
+                backgroundColor: isActive ? '#EAE7DC' : 'transparent',
+                borderRadius: '999px',
+                transition: 'all 0.2s ease',
+              }}
+            >
               <Icon
                 size={22}
                 active={isActive}
                 isAlert={isSafetyAlert}
-                color={isActive ? (isSafetyAlert ? '#B82828' : '#1C2B1D') : '#849183'}
+                color={color}
               />
               {isSafetyAlert && (
                 <span
                   style={{
                     position: 'absolute',
-                    top: -2,
-                    right: -2,
+                    top: 1,
+                    right: 10,
                     width: '7px',
                     height: '7px',
                     borderRadius: '50%',
                     backgroundColor: '#B82828',
-                    boxShadow: '0 0 8px #B82828',
+                    boxShadow: '0 0 6px #B82828',
                   }}
                 />
               )}
@@ -85,7 +102,7 @@ export const BottomNav = () => {
               style={{
                 fontSize: '11px',
                 fontWeight: isActive ? '700' : '500',
-                color: labelColor,
+                color: color,
                 letterSpacing: '-0.1px',
               }}
             >
@@ -94,6 +111,6 @@ export const BottomNav = () => {
           </button>
         );
       })}
-    </div>
+    </nav>
   );
 };

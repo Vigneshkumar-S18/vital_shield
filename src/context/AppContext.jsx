@@ -6,7 +6,9 @@ import {
   initialNotifications,
   healthReportsData,
   keyInsightsData,
+  insightsDataByPeriod,
   sensorDiagnostics,
+  nearbyPoliceStations,
 } from '../data/initialData';
 import { getESP32Data } from '../services/esp32Api';
 
@@ -336,6 +338,8 @@ export const AppProvider = ({ children }) => {
         setViewMode,
         healthReportsData,
         keyInsightsData,
+        insightsDataByPeriod,
+        nearbyPoliceStations,
         sensorDiagnostics: liveSensorDiagnostics,
         esp32Status,
         gpsData,

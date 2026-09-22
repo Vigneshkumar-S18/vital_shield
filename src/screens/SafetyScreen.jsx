@@ -12,6 +12,7 @@ export const SafetyScreen = () => {
     triggerSos,
     navigateTo,
     showToast,
+    setIsAddContactModalOpen,
   } = useApp();
 
   // Hold-to-activate SOS (3 seconds)
@@ -337,9 +338,9 @@ export const SafetyScreen = () => {
                 </span>
               </button>
 
-              {/* Action 2: Send Vitals Snapshot */}
+              {/* Action 2: Alert Nearby Police */}
               <button
-                onClick={() => showToast('Dispatched encrypted physiological snapshot to contacts')}
+                onClick={() => showToast('🚓 Live location dispatched to Nearby Police Branch (Central Division - 1.2 km)')}
                 style={{
                   backgroundColor: '#FFFFFF',
                   borderRadius: '16px',
@@ -350,6 +351,8 @@ export const SafetyScreen = () => {
                   textAlign: 'center',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
                   gap: '6px',
+                  cursor: 'pointer',
+                  border: 'none',
                 }}
               >
                 <div
@@ -363,16 +366,16 @@ export const SafetyScreen = () => {
                     justifyContent: 'center',
                   }}
                 >
-                  <span style={{ fontSize: '16px' }}>🗂️</span>
+                  <span style={{ fontSize: '18px' }}>🚓</span>
                 </div>
                 <span style={{ fontSize: '11px', fontWeight: '700', color: '#1B2C1E', lineHeight: '1.2' }}>
-                  Send<br />Vitals Snapshot
+                  Nearby<br />Police Branch
                 </span>
               </button>
 
-              {/* Action 3: Notify Contacts */}
+              {/* Action 3: Notify Family Members */}
               <button
-                onClick={() => showToast('Pinged emergency contacts: Mom, Dad, Best Friend')}
+                onClick={() => showToast('👨‍👩‍👧 Live location shared with family members: Mom, Dad')}
                 style={{
                   backgroundColor: '#FFFFFF',
                   borderRadius: '16px',
@@ -383,6 +386,8 @@ export const SafetyScreen = () => {
                   textAlign: 'center',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
                   gap: '6px',
+                  cursor: 'pointer',
+                  border: 'none',
                 }}
               >
                 <div
@@ -396,10 +401,10 @@ export const SafetyScreen = () => {
                     justifyContent: 'center',
                   }}
                 >
-                  <span style={{ fontSize: '16px' }}>👥</span>
+                  <span style={{ fontSize: '18px' }}>👨‍👩‍👧</span>
                 </div>
                 <span style={{ fontSize: '11px', fontWeight: '700', color: '#1B2C1E', lineHeight: '1.2' }}>
-                  Notify<br />Contacts
+                  Notify<br />Family Members
                 </span>
               </button>
             </div>
@@ -423,9 +428,9 @@ export const SafetyScreen = () => {
                 </button>
               </div>
 
-              {/* Contacts List */}
+              {/* Contacts List - All Contacts Displayed */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {contacts.slice(0, 3).map((c) => (
+                {contacts.map((c) => (
                   <div
                     key={c.id}
                     style={{
@@ -439,16 +444,41 @@ export const SafetyScreen = () => {
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <img
-                        src={c.avatar}
-                        alt={c.name}
-                        style={{
-                          width: '42px',
-                          height: '42px',
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                        }}
-                      />
+                      {c.avatar ? (
+                        <img
+                          src={c.avatar}
+                          alt={c.name}
+                          style={{
+                            width: '42px',
+                            height: '42px',
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                          }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: '42px',
+                            height: '42px',
+                            borderRadius: '50%',
+                            backgroundColor: '#EBE5D8',
+                            color: '#4B5563',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: '700',
+                            fontSize: '13px',
+                          }}
+                        >
+                          {c.avatarInitials ||
+                            c.name
+                              .split(' ')
+                              .map((n) => n[0])
+                              .join('')
+                              .slice(0, 2)
+                              .toUpperCase()}
+                        </div>
+                      )}
                       <div>
                         <div style={{ fontSize: '14px', fontWeight: '700', color: '#1B2C1E' }}>{c.name}</div>
                         <div style={{ fontSize: '11.5px', color: '#6B7280' }}>{c.phone}</div>
@@ -487,6 +517,31 @@ export const SafetyScreen = () => {
                   </div>
                 ))}
               </div>
+
+              {/* Add New Contact Button directly in Safety Tab */}
+              <button
+                onClick={() => setIsAddContactModalOpen(true)}
+                style={{
+                  marginTop: '10px',
+                  width: '100%',
+                  backgroundColor: '#ECE7DC',
+                  color: '#1B2C1E',
+                  padding: '12px 16px',
+                  borderRadius: '14px',
+                  fontSize: '13.5px',
+                  fontWeight: '700',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
+                  cursor: 'pointer',
+                  border: 'none',
+                }}
+              >
+                <span style={{ fontSize: '16px', fontWeight: '700' }}>+</span>
+                <span>Add Emergency Contact</span>
+              </button>
             </div>
           </>
         ) : (

@@ -65,11 +65,11 @@ export const ReportsIcon = ({ size = 22, active = false, color }) => (
   </svg>
 );
 
-export const MoreIcon = ({ size = 22, active = false, color }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color || (active ? "#1B2C1E" : "#8A9689")} strokeWidth={active ? "2.5" : "2"} strokeLinecap="round" strokeLinejoin="round">
-    <line x1="4" y1="7" x2="20" y2="7" />
-    <line x1="4" y1="12" x2="16" y2="12" />
-    <line x1="4" y1="17" x2="11" y2="17" />
+export const MoreIcon = ({ size = 22, color }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color || "#8A9689"}>
+    <circle cx="5" cy="12" r="2.2" />
+    <circle cx="12" cy="12" r="2.2" />
+    <circle cx="19" cy="12" r="2.2" />
   </svg>
 );
 

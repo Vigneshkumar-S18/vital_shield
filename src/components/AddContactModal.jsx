@@ -14,16 +14,23 @@ export const AddContactModal = () => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) return;
     addContact({
-      name,
-      phone,
+      name: name.trim(),
+      phone: phone.trim(),
       relation,
       priority,
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
+      avatarInitials: name
+        .trim()
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase(),
       notifyChannel: 'SMS + Call',
       shareHealth: true,
     });
     setName('');
     setPhone('');
+    setIsAddContactModalOpen(false);
   };
 
   return (

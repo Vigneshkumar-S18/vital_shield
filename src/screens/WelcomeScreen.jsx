@@ -12,44 +12,26 @@ export const WelcomeScreen = () => {
         position: 'relative',
         width: '100%',
         height: '100%',
+        minHeight: '100dvh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        backgroundImage: `linear-gradient(180deg, rgba(246, 244, 237, 0.94) 0%, rgba(246, 244, 237, 0.45) 30%, rgba(0, 0, 0, 0.2) 65%, rgba(18, 28, 20, 0.88) 100%), url('/welcome_hiker.jpg')`,
+        backgroundImage: `linear-gradient(180deg, rgba(246, 244, 237, 0.95) 0%, rgba(246, 244, 237, 0.5) 28%, rgba(0, 0, 0, 0.15) 65%, rgba(18, 28, 20, 0.88) 100%), url('/welcome_hiker.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         overflow: 'hidden',
       }}
     >
+      {/* Top Status Area */}
       <TopStatusBar dark={false} isWelcome={true} />
 
-      {/* Top Left Badge */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '46px',
-          left: '20px',
-          width: '38px',
-          height: '38px',
-          backgroundColor: '#1E2333',
-          borderRadius: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-          zIndex: 10,
-        }}
-      >
-        <span style={{ fontSize: '18px' }}>🧠</span>
-      </div>
-
-      {/* Header Logo & Title */}
+      {/* Top Center Crest & Branding */}
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginTop: '18px',
+          marginTop: '10px',
           zIndex: 10,
         }}
       >
@@ -65,6 +47,7 @@ export const WelcomeScreen = () => {
             textTransform: 'uppercase',
             fontFamily: 'var(--font-sans)',
             margin: 0,
+            lineHeight: '1.2',
           }}
         >
           VITALSHIELD
@@ -86,18 +69,18 @@ export const WelcomeScreen = () => {
       <div
         style={{
           paddingLeft: '28px',
-          marginTop: '20px',
+          marginTop: '14px',
           zIndex: 10,
         }}
       >
         <div
           style={{
             fontFamily: 'var(--font-script)',
-            fontSize: '36px',
+            fontSize: '38px',
             lineHeight: '1.08',
             color: '#243827',
             transform: 'rotate(-4deg)',
-            textShadow: '0 1px 2px rgba(255,255,255,0.6)',
+            textShadow: '0 1px 3px rgba(255,255,255,0.7)',
             letterSpacing: '0.5px',
           }}
         >
@@ -112,7 +95,7 @@ export const WelcomeScreen = () => {
       {/* Bottom Content & Button */}
       <div
         style={{
-          padding: '0 24px 34px 24px',
+          padding: '0 24px max(32px, env(safe-area-inset-bottom)) 24px',
           zIndex: 10,
           display: 'flex',
           flexDirection: 'column',
@@ -124,7 +107,7 @@ export const WelcomeScreen = () => {
             fontSize: '15px',
             fontWeight: '400',
             lineHeight: '1.45',
-            marginBottom: '28px',
+            marginBottom: '26px',
             textShadow: '0 2px 4px rgba(0, 0, 0, 0.7)',
           }}
         >
@@ -152,6 +135,8 @@ export const WelcomeScreen = () => {
             gap: '10px',
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
             transition: 'all 0.2s ease',
+            border: 'none',
+            cursor: 'pointer',
           }}
           onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.97)')}
           onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
