@@ -253,13 +253,15 @@ export const HomeScreen = () => {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <span className="heart-beat-anim">
+              <span className={vitals.heartRate ? "heart-beat-anim" : ""}>
                 <HeartIcon size={18} />
               </span>
               <span style={{ fontSize: '12px', color: '#6A7869', fontWeight: '500' }}>Heart Rate</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-              <span style={{ fontSize: '22px', fontWeight: '800', color: '#1B2C1E' }}>{vitals.heartRate}</span>
+              <span style={{ fontSize: '22px', fontWeight: '800', color: '#1B2C1E' }}>
+                {vitals.heartRate !== null && vitals.heartRate !== undefined ? vitals.heartRate : '--'}
+              </span>
               <span style={{ fontSize: '12px', color: '#4B5563', fontWeight: '600' }}>bpm</span>
             </div>
           </div>
@@ -281,7 +283,9 @@ export const HomeScreen = () => {
               <span style={{ fontSize: '12px', color: '#6A7869', fontWeight: '500' }}>SpO₂</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-              <span style={{ fontSize: '22px', fontWeight: '800', color: '#1B2C1E' }}>{vitals.spo2}</span>
+              <span style={{ fontSize: '22px', fontWeight: '800', color: '#1B2C1E' }}>
+                {vitals.spo2 !== null && vitals.spo2 !== undefined ? vitals.spo2 : '--'}
+              </span>
               <span style={{ fontSize: '13px', color: '#4B5563', fontWeight: '600' }}>%</span>
             </div>
           </div>
@@ -303,7 +307,9 @@ export const HomeScreen = () => {
               <span style={{ fontSize: '12px', color: '#6A7869', fontWeight: '500' }}>Body Temp</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
-              <span style={{ fontSize: '22px', fontWeight: '800', color: '#1B2C1E' }}>{vitals.bodyTemp}</span>
+              <span style={{ fontSize: '22px', fontWeight: '800', color: '#1B2C1E' }}>
+                {vitals.bodyTemp !== null && vitals.bodyTemp !== undefined ? vitals.bodyTemp : '--'}
+              </span>
               <span style={{ fontSize: '13px', color: '#4B5563', fontWeight: '600' }}>°C</span>
             </div>
           </div>
@@ -325,7 +331,9 @@ export const HomeScreen = () => {
               <span style={{ fontSize: '12px', color: '#6A7869', fontWeight: '500' }}>Activity</span>
             </div>
             <div>
-              <span style={{ fontSize: '18px', fontWeight: '800', color: '#1B2C1E' }}>{vitals.activity}</span>
+              <span style={{ fontSize: '18px', fontWeight: '800', color: '#1B2C1E' }}>
+                {vitals.activity || 'RESTING'}
+              </span>
             </div>
           </div>
         </div>

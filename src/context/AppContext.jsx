@@ -8,6 +8,7 @@ import {
   keyInsightsData,
   sensorDiagnostics,
 } from '../data/initialData';
+import { getESP32Data } from '../services/esp32Api';
 
 const AppContext = createContext();
 
@@ -41,6 +42,23 @@ export const AppProvider = ({ children }) => {
   // Vitals State & Live Simulation
   const [vitals, setVitals] = useState(initialVitals);
   const [isLiveStreaming, setIsLiveStreaming] = useState(true);
+
+  // ESP32 Integration State
+  const [esp32Status, setEsp32Status] = useState('connecting'); // 'connecting' | 'connected' | 'disconnected'
+  const [gpsData, setGpsData] = useState({
+    fix: false,
+    latitude: null,
+    longitude: null,
+    altitude: null,
+    speed: null,
+    satellites: 0,
+  });
+  const [esp32Wifi, setEsp32Wifi] = useState({
+    connected: false,
+    ip: '10.99.16.90',
+    rssi: null,
+  });
+  const [vitalsHistory, setVitalsHistory] = useState([]);
 
   // Modals
   const [isDeviceModalOpen, setIsDeviceModalOpen] = useState(false);
@@ -91,24 +109,118 @@ export const AppProvider = ({ children }) => {
     }, duration);
   };
 
-  // Realistic subtle vitals micro-drift
+  // Real-time ESP32 HTTP Polling every 1000 ms
   useEffect(() => {
-    if (!isLiveStreaming) return;
-    const interval = setInterval(() => {
-      setVitals((prev) => {
-        // Micro-jitter: HR 76 - 81 bpm, SpO2 97 - 99%
-        const deltaHr = Math.random() > 0.5 ? 1 : -1;
-        const newHr = Math.min(84, Math.max(74, prev.heartRate + (Math.random() > 0.6 ? deltaHr : 0)));
-        const newSpo2 = Math.min(99, Math.max(97, prev.spo2 + (Math.random() > 0.85 ? (Math.random() > 0.5 ? 1 : -1) : 0)));
-        return {
-          ...prev,
-          heartRate: newHr,
-          spo2: newSpo2,
-        };
-      });
-    }, 2800);
-    return () => clearInterval(interval);
-  }, [isLiveStreaming]);
+    let isMounted = true;
+    let isFetching = false;
+
+    const fetchTelemetry = async () => {
+      if (isFetching) return;
+      isFetching = true;
+
+      try {
+        const result = await getESP32Data(3000);
+        if (!isMounted) return;
+
+        if (result.isConnected && result.data) {
+          const d = result.data;
+          setEsp32Status('connected');
+
+          setVitals((prev) => {
+            // Heart Rate & SpO2: use validated live reading from ESP32
+            // If ESP32 reports null (e.g. no finger), pass null so UI shows '--'
+            const hr = d.heartRate !== undefined ? d.heartRate : prev.heartRate;
+            const spo2 = d.spo2 !== undefined ? d.spo2 : prev.spo2;
+            const bodyTemp = d.temperature !== null && d.temperature !== undefined ? d.temperature : prev.bodyTemp;
+            const ambientTemp =
+              d.dhtTemperature !== null && d.dhtTemperature !== undefined
+                ? d.dhtTemperature
+                : d.temperature !== null && d.temperature !== undefined
+                ? d.temperature
+                : prev.ambientTemp;
+            const humidity = d.humidity !== null && d.humidity !== undefined ? d.humidity : prev.humidity;
+            const pressure = d.pressure !== null && d.pressure !== undefined ? d.pressure : prev.pressure;
+            const altitude = d.altitude !== null && d.altitude !== undefined ? d.altitude : prev.altitude;
+            const rawAltitude = d.rawAltitude !== null && d.rawAltitude !== undefined ? d.rawAltitude : prev.rawAltitude;
+            const acceleration = d.acceleration !== null && d.acceleration !== undefined ? d.acceleration : prev.acceleration;
+            const activity = d.activity || prev.activity || 'RESTING';
+
+            let activityLevel = 'Resting';
+            if (activity === 'RUNNING') activityLevel = 'Elevated';
+            else if (activity === 'WALKING') activityLevel = 'Moderate';
+
+            let stressIndex = 'Low';
+            if (hr && hr > 100) stressIndex = 'Elevated';
+            else if (hr && hr > 85) stressIndex = 'Moderate';
+
+            return {
+              ...prev,
+              heartRate: hr,
+              spo2: spo2,
+              bodyTemp: bodyTemp,
+              ambientTemp: ambientTemp,
+              humidity: humidity,
+              pressure: pressure,
+              altitude: altitude,
+              rawAltitude: rawAltitude,
+              acceleration: acceleration,
+              activity: activity,
+              activityLevel: activityLevel,
+              stressIndex: stressIndex,
+            };
+          });
+
+          if (d.gps) {
+            setGpsData(d.gps);
+          }
+
+          if (d.wifi) {
+            setEsp32Wifi(d.wifi);
+          }
+
+          // Rolling history buffer for charts (last 60 points)
+          setVitalsHistory((prevHistory) => {
+            const now = new Date();
+            const timeLabel = `${now.getHours()}:${now.getMinutes() < 10 ? '0' : ''}${now.getMinutes()}:${now.getSeconds() < 10 ? '0' : ''}${now.getSeconds()}`;
+            const newPoint = {
+              time: timeLabel,
+              timestamp: d.timestamp,
+              heartRate: d.heartRate,
+              spo2: d.spo2,
+              bodyTemp: d.temperature,
+              ambientTemp: d.dhtTemperature || d.temperature,
+              humidity: d.humidity,
+              pressure: d.pressure,
+              altitude: d.altitude,
+              acceleration: d.acceleration,
+            };
+            const updated = [...prevHistory, newPoint];
+            return updated.length > 60 ? updated.slice(-60) : updated;
+          });
+        } else {
+          // ESP32 unreachable: keep previous values, flag disconnected
+          setEsp32Status('disconnected');
+        }
+      } catch {
+        if (isMounted) {
+          setEsp32Status('disconnected');
+        }
+      } finally {
+        isFetching = false;
+      }
+    };
+
+    // Initial immediate fetch
+    fetchTelemetry();
+
+    // 1000ms polling interval
+    const interval = setInterval(fetchTelemetry, 1000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   // SOS activation triggers
   const triggerSos = () => {
@@ -138,6 +250,46 @@ export const AppProvider = ({ children }) => {
     setIsAddContactModalOpen(false);
     showToast(`Added ${newContact.name} to Emergency Contacts.`);
   };
+
+  // Dynamic sensor diagnostics reflecting live ESP32 status
+  const liveSensorDiagnostics = [
+    {
+      name: 'Heart Rate (MAX30102)',
+      status: esp32Status !== 'connected' ? 'Offline' : vitals.heartRate !== null ? 'Good' : 'Searching (No finger)',
+      icon: 'heart',
+      samplingRate: '50 Hz',
+    },
+    {
+      name: 'SpO₂ Sensor (MAX30102)',
+      status: esp32Status !== 'connected' ? 'Offline' : vitals.spo2 !== null ? 'Good' : 'Searching (No finger)',
+      icon: 'droplet',
+      samplingRate: '25 Hz',
+    },
+    {
+      name: 'Skin / Body Temp (BMP280)',
+      status: esp32Status !== 'connected' ? 'Offline' : vitals.bodyTemp !== null ? 'Good' : 'Offline',
+      icon: 'temp',
+      samplingRate: '1 Hz',
+    },
+    {
+      name: 'Motion & Activity (MPU6050)',
+      status: esp32Status !== 'connected' ? 'Offline' : vitals.acceleration !== null ? 'Good' : 'Offline',
+      icon: 'motion',
+      samplingRate: '50 Hz',
+    },
+    {
+      name: 'Environment & HW-611 (BMP/DHT)',
+      status: esp32Status !== 'connected' ? 'Offline' : vitals.pressure !== null ? 'Good' : 'Calibrating...',
+      icon: 'cloud',
+      samplingRate: '1 Hz',
+    },
+    {
+      name: 'GNSS Satellite Fix',
+      status: esp32Status !== 'connected' ? 'Offline' : gpsData.fix ? 'Fix Acquired' : `Searching (${gpsData.satellites || 0} Sats)`,
+      icon: 'gps',
+      accuracy: gpsData.fix ? '±5 m' : 'No fix',
+    },
+  ];
 
   return (
     <AppContext.Provider
@@ -184,7 +336,11 @@ export const AppProvider = ({ children }) => {
         setViewMode,
         healthReportsData,
         keyInsightsData,
-        sensorDiagnostics,
+        sensorDiagnostics: liveSensorDiagnostics,
+        esp32Status,
+        gpsData,
+        esp32Wifi,
+        vitalsHistory,
       }}
     >
       {children}

@@ -13,6 +13,7 @@ export const MobileFrame = ({ children }) => {
     setViewMode,
     isSosActive,
     toastMessage,
+    esp32Status,
   } = useApp();
 
   const screens = [
@@ -69,8 +70,16 @@ export const MobileFrame = ({ children }) => {
               width: '10px',
               height: '10px',
               borderRadius: '50%',
-              backgroundColor: isSosActive ? '#DC2626' : '#16A34A',
-              boxShadow: isSosActive ? '0 0 10px #DC2626' : '0 0 8px #16A34A',
+              backgroundColor: isSosActive
+                ? '#DC2626'
+                : esp32Status === 'connected'
+                ? '#16A34A'
+                : '#DC2626',
+              boxShadow: isSosActive
+                ? '0 0 10px #DC2626'
+                : esp32Status === 'connected'
+                ? '0 0 8px #16A34A'
+                : '0 0 8px #DC2626',
             }}
           />
           <span style={{ fontSize: '14px', fontWeight: '800', color: '#1B2C1E', letterSpacing: '0.5px' }}>
@@ -82,11 +91,23 @@ export const MobileFrame = ({ children }) => {
               fontWeight: '700',
               padding: '2px 8px',
               borderRadius: '999px',
-              backgroundColor: isSosActive ? '#FEE2E2' : '#E2ECE2',
-              color: isSosActive ? '#991B1B' : '#1E3823',
+              backgroundColor: isSosActive
+                ? '#FEE2E2'
+                : esp32Status === 'connected'
+                ? '#E2ECE2'
+                : '#FEE2E2',
+              color: isSosActive
+                ? '#991B1B'
+                : esp32Status === 'connected'
+                ? '#1E3823'
+                : '#991B1B',
             }}
           >
-            {isSosActive ? 'EMERGENCY SOS ACTIVE' : 'SYSTEM HEALTHY'}
+            {isSosActive
+              ? 'EMERGENCY SOS ACTIVE'
+              : esp32Status === 'connected'
+              ? '● ESP32 CONNECTED'
+              : '● ESP32 DISCONNECTED'}
           </span>
         </div>
 

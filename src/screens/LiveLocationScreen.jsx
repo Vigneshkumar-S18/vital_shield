@@ -3,11 +3,18 @@ import { useApp } from '../context/AppContext';
 import { TopStatusBar } from '../components/TopStatusBar';
 
 export const LiveLocationScreen = () => {
-  const { goBack, contacts, cancelSos, showToast } = useApp();
+  const { goBack, contacts, cancelSos, showToast, gpsData } = useApp();
 
   const handleShareTrackingLink = () => {
-    navigator.clipboard?.writeText('https://vitalshield.safety/live-track/vs-session-98421');
-    showToast('✓ Secure tracking link copied to clipboard');
+    if (gpsData && gpsData.fix && gpsData.latitude && gpsData.longitude) {
+      navigator.clipboard?.writeText(
+        `https://maps.google.com/?q=${gpsData.latitude},${gpsData.longitude}`
+      );
+      showToast('✓ Live GPS coordinate link copied to clipboard');
+    } else {
+      navigator.clipboard?.writeText('https://vitalshield.safety/live-track/vs-session-98421');
+      showToast('✓ Secure tracking link copied to clipboard');
+    }
   };
 
   return (
@@ -82,7 +89,9 @@ export const LiveLocationScreen = () => {
           <span>SOS ACTIVE</span>
         </div>
         <span style={{ fontSize: '11.5px', color: '#6B7280', marginTop: '4px' }}>
-          Last updated: 2 min ago
+          {gpsData && gpsData.fix
+            ? `GPS Fix Active • ${gpsData.satellites || 0} Satellites Connected`
+            : 'GPS Status: NO GPS FIX (Searching...)'}
         </span>
       </div>
 
@@ -117,7 +126,7 @@ export const LiveLocationScreen = () => {
           >
             {/* Background block shapes */}
             <rect width="400" height="240" fill="#EAE5D9" />
-            
+
             {/* Parks / Green spaces */}
             <path d="M10 20 L90 10 L110 80 L30 110 Z" fill="#D2DEC8" opacity="0.6" />
             <path d="M300 120 L390 110 L380 220 L270 210 Z" fill="#D2DEC8" opacity="0.6" />
@@ -162,11 +171,11 @@ export const LiveLocationScreen = () => {
                 width: '32px',
                 height: '32px',
                 borderRadius: '50%',
-                backgroundColor: '#B82828',
+                backgroundColor: gpsData && gpsData.fix ? '#16A34A' : '#B82828',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(184, 40, 40, 0.6)',
+                boxShadow: gpsData && gpsData.fix ? '0 4px 12px rgba(22, 163, 74, 0.6)' : '0 4px 12px rgba(184, 40, 40, 0.6)',
                 zIndex: 20,
               }}
             >
@@ -203,7 +212,7 @@ export const LiveLocationScreen = () => {
                 width: '36px',
                 height: '36px',
                 borderRadius: '50%',
-                backgroundColor: '#FEE2E2',
+                backgroundColor: gpsData && gpsData.fix ? '#DCFCE7' : '#FEE2E2',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -212,12 +221,34 @@ export const LiveLocationScreen = () => {
             >
               📍
             </div>
-            <div>
-              <div style={{ fontSize: '13.5px', fontWeight: '800', color: '#1B2C1E' }}>Your Location</div>
-              <div style={{ fontSize: '11.5px', color: '#4B5563', marginTop: '1px' }}>
-                12.9716° N, 77.5946° E
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '13.5px', fontWeight: '800', color: '#1B2C1E' }}>
+                  {gpsData && gpsData.fix ? 'GPS Location' : 'NO GPS FIX'}
+                </span>
+                <span
+                  style={{
+                    fontSize: '10px',
+                    fontWeight: '700',
+                    padding: '1px 6px',
+                    borderRadius: '4px',
+                    backgroundColor: gpsData && gpsData.fix ? '#DCFCE7' : '#FEE2E2',
+                    color: gpsData && gpsData.fix ? '#166534' : '#991B1B',
+                  }}
+                >
+                  {gpsData && gpsData.fix ? 'FIX' : 'NO FIX'}
+                </span>
               </div>
-              <div style={{ fontSize: '10.5px', color: '#6B7280' }}>Accuracy: 8 m • Relayed via Safety Node</div>
+              <div style={{ fontSize: '11.5px', color: '#4B5563', marginTop: '1px' }}>
+                {gpsData && gpsData.fix && gpsData.latitude !== null && gpsData.longitude !== null
+                  ? `${gpsData.latitude.toFixed(4)}°, ${gpsData.longitude.toFixed(4)}°`
+                  : 'Searching for satellites...'}
+              </div>
+              <div style={{ fontSize: '10.5px', color: '#6B7280' }}>
+                {gpsData && gpsData.fix
+                  ? `GPS Alt: ${gpsData.altitude !== null ? gpsData.altitude + ' m' : '--'} • Speed: ${gpsData.speed || 0} km/h • Sats: ${gpsData.satellites || 0}`
+                  : `Satellites: ${gpsData ? gpsData.satellites || 0 : 0} • Relayed via Safety Node`}
+              </div>
             </div>
           </div>
         </div>
@@ -307,3 +338,5 @@ export const LiveLocationScreen = () => {
     </div>
   );
 };
+
+

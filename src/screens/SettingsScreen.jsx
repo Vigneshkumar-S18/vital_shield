@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { TopStatusBar } from '../components/TopStatusBar';
 
 export const SettingsScreen = () => {
-  const { goBack, userProfile, setIsDeviceModalOpen, navigateTo, showToast } = useApp();
+  const { goBack, userProfile, setIsDeviceModalOpen, navigateTo, showToast, esp32Status } = useApp();
   const [activeSubView, setActiveSubView] = useState(null); // 'app_pref', 'safety_pref', 'privacy', 'help', 'about'
 
   const handleRowClick = (key) => {
@@ -103,9 +103,16 @@ export const SettingsScreen = () => {
               }}
             />
             <div>
-              <div style={{ fontSize: '15px', fontWeight: '800', color: '#1B2C1E' }}>My Device</div>
-              <div style={{ fontSize: '12px', color: '#16A34A', fontWeight: '600', marginTop: '2px' }}>
-                Connected • {userProfile.device.battery}%
+              <div style={{ fontSize: '15px', fontWeight: '800', color: '#1B2C1E' }}>ESP32 Body Monitor</div>
+              <div
+                style={{
+                  fontSize: '12px',
+                  color: esp32Status === 'connected' ? '#16A34A' : '#DC2626',
+                  fontWeight: '600',
+                  marginTop: '2px',
+                }}
+              >
+                {esp32Status === 'connected' ? 'Connected • 10.99.16.90' : 'Disconnected'}
               </div>
             </div>
           </div>

@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 
 export const DeviceModal = () => {
-  const { isDeviceModalOpen, setIsDeviceModalOpen, userProfile, sensorDiagnostics, showToast } = useApp();
+  const {
+    isDeviceModalOpen,
+    setIsDeviceModalOpen,
+    userProfile,
+    sensorDiagnostics,
+    showToast,
+    esp32Status,
+    esp32Wifi,
+  } = useApp();
   const [isSyncing, setIsSyncing] = useState(false);
 
   if (!isDeviceModalOpen) return null;
@@ -62,13 +70,22 @@ export const DeviceModal = () => {
           />
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1B2C1E' }}>{userProfile.device.name}</h3>
-              <span style={{ fontSize: '10px', backgroundColor: '#DCFCE7', color: '#166534', fontWeight: '700', padding: '2px 8px', borderRadius: '999px' }}>
-                ONLINE
+              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1B2C1E' }}>ESP32 Body Monitor</h3>
+              <span
+                style={{
+                  fontSize: '10px',
+                  backgroundColor: esp32Status === 'connected' ? '#DCFCE7' : '#FEE2E2',
+                  color: esp32Status === 'connected' ? '#166534' : '#991B1B',
+                  fontWeight: '700',
+                  padding: '2px 8px',
+                  borderRadius: '999px',
+                }}
+              >
+                {esp32Status === 'connected' ? 'ONLINE' : 'OFFLINE'}
               </span>
             </div>
             <p style={{ fontSize: '12px', color: '#6B7280', marginTop: '2px' }}>
-              Firmware {userProfile.device.firmware} • Battery {userProfile.device.battery}%
+              IP: {esp32Wifi && esp32Wifi.ip ? esp32Wifi.ip : '10.99.16.90'} • WiFi RSSI: {esp32Wifi && esp32Wifi.rssi !== null ? `${esp32Wifi.rssi} dBm` : '-48 dBm'}
             </p>
           </div>
         </div>
@@ -96,8 +113,22 @@ export const DeviceModal = () => {
                 <span style={{ fontSize: '13px', fontWeight: '600', color: '#1F2937' }}>{sensor.name}</span>
                 <span style={{ fontSize: '11px', color: '#9CA3AF', marginLeft: '6px' }}>({sensor.samplingRate || sensor.accuracy})</span>
               </div>
-              <span style={{ fontSize: '12px', fontWeight: '700', color: '#15803D', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                ✓ {sensor.status}
+              <span
+                style={{
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  color: sensor.status.includes('Offline')
+                    ? '#DC2626'
+                    : sensor.status.includes('Searching')
+                    ? '#D97706'
+                    : '#15803D',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                {sensor.status.includes('Offline') ? '✕ ' : sensor.status.includes('Searching') ? '⏳ ' : '✓ '}
+                {sensor.status}
               </span>
             </div>
           ))}
